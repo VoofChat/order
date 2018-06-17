@@ -7,16 +7,17 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Connection;
 import java.io.UnsupportedEncodingException;
 
 @Controller
@@ -28,6 +29,51 @@ public class OrderEntryControllor {
     CategoryManager categoryManager;
 
     Logger logger = Logger.getLogger(OrderEntryControllor.class);
+
+    @RequestMapping("/testIndex")
+    @ResponseBody
+    public String testIndex(){
+        return "success";
+    }
+
+    @RequestMapping("/testJdbc")
+    @ResponseBody
+    public String testJdbc(){
+        try {
+            String URL = "jdbc:mysql://120.78.94.31:3306/order?characterEncoding=UTF-8";
+            String USER = "root";
+            String PASSWORD = "2018Zheng@)!*";
+            //1.加载驱动程序
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>1.加载驱动程序");
+            Class.forName("com.mysql.jdbc.Driver");
+            //2.获得数据库链接
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>2.获得数据库链接");
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            //3.通过数据库的连接操作数据库，实现增删改查（使用Statement类）
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>3.通过数据库的连接操作数据库，实现增删改查（使用Statement类）");
+            Statement st = conn.createStatement();
+
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>4.处理数据库的返回结果(使用ResultSet类)");
+            ResultSet rs = st.executeQuery("select * from `menus`");
+            //4.处理数据库的返回结果(使用ResultSet类)
+
+            while (rs.next()) {
+                System.out.println(rs.getString("mname") + " "
+                        + rs.getFloat("price"));
+            }
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>5.关闭资源");
+            //关闭资源
+            rs.close();
+            st.close();
+            conn.close();
+        }catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return e.toString();
+        } finally {
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>end");
+        }
+        return "success";
+    }
 
     /**
      * 展示菜品
