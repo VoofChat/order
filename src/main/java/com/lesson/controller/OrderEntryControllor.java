@@ -66,10 +66,14 @@ public class OrderEntryControllor {
             rs.close();
             st.close();
             conn.close();
-        }catch (SQLException | ClassNotFoundException e) {
+        }catch (SQLException  e) {
             e.printStackTrace();
             return e.toString();
-        } finally {
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+            return e.toString();
+        }
+        finally {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>end");
         }
         return "success";
