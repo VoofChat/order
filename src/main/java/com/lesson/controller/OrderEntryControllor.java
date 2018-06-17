@@ -40,7 +40,7 @@ public class OrderEntryControllor {
     @ResponseBody
     public String testJdbc(){
         try {
-            String URL = "jdbc:mysql://120.78.94.31:3306/order?characterEncoding=UTF-8";
+            String URL = "jdbc:mysql://127.0.0.1:3306/order?characterEncoding=UTF-8";
             String USER = "root";
             String PASSWORD = "2018Zheng@)!*";
             //1.加载驱动程序
